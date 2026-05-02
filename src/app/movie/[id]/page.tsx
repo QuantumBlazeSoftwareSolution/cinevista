@@ -4,31 +4,10 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-// Mock Data
-const movieData = {
-  id: "avengers-doomsday",
-  title: "Avengers: Doomsday",
-  year: "2026",
-  tags: ["ACTION", "SCI-FI", "IMAX"],
-  metascore: 9.8,
-  rating: "9.2",
-  reviews: "45K Reviews",
-  runtime: "2h 45min",
-  releaseDate: "01.05.2026",
-  director: "Anthony & Joe Russo",
-  writer: "Stephen McFeely",
-  storyline: "The Avengers face their greatest threat yet as Victor von Doom emerges from the multiverse to reshape reality in his own image. A cosmic battle that spans dimensions and tests the limits of every hero.",
-  cast: [
-    { name: "Robert Downey Jr.", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&fit=crop" },
-    { name: "Tom Holland", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&fit=crop" },
-    { name: "Benedict Cumberbatch", img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&fit=crop" },
-    { name: "Chris Hemsworth", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&fit=crop" }
-  ],
-  poster: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=600&fit=crop",
-  bg: "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?w=1200&fit=crop"
-};
+import { MOVIES } from "@/data/movies";
 
 export default function MovieDetail({ params }: { params: { id: string } }) {
+  const movie = MOVIES.find(m => m.id === params.id) || MOVIES[0];
   const [activeTab, setActiveTab] = useState<'details' | 'booking'>('details');
   const [selectedDate, setSelectedDate] = useState(0);
   const [selectedTime, setSelectedTime] = useState<number | null>(null);
@@ -53,12 +32,12 @@ export default function MovieDetail({ params }: { params: { id: string } }) {
   return (
     <div className="min-h-screen bg-[#111114] text-white font-sans selection:bg-[#C9A84C] selection:text-black pb-24">
       {/* Top Background & Header */}
-      <div className="relative h-[300px] w-full">
-        <Image src={movieData.bg} alt="Background" fill className="object-cover opacity-60" unoptimized />
+      <div className="relative h-[400px] w-full">
+        <Image src={movie.bg} alt="Background" fill className="object-cover opacity-60" unoptimized />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#111114]/80 to-[#111114]"></div>
         
         {/* Navbar */}
-        <div className="absolute top-0 w-full p-6 flex justify-between items-center z-10">
+        <div className="absolute top-0 w-full p-6 flex justify-between items-center z-30">
           <Link href="/" className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
           </Link>
@@ -72,22 +51,25 @@ export default function MovieDetail({ params }: { params: { id: string } }) {
           </div>
         </div>
 
-        {/* Play Button */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border-2 border-white/30 bg-white/10 backdrop-blur-sm flex items-center justify-center cursor-pointer hover:scale-110 hover:bg-white/20 transition-all z-10">
+        {/* Play Button / Trailer */}
+        <div 
+          onClick={() => window.open(`https://www.youtube.com/results?search_query=${movie.title}+trailer`, '_blank')}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border-2 border-white/30 bg-white/10 backdrop-blur-sm flex items-center justify-center cursor-pointer hover:scale-110 hover:bg-white/20 transition-all z-20"
+        >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="white" className="ml-1"><path d="M5 3l14 9-14 9V3z"/></svg>
         </div>
       </div>
 
-      <div className="max-w-[800px] mx-auto px-6 relative z-20 -mt-10">
+      <div className="max-w-[800px] mx-auto px-6 relative z-20 -mt-20">
         
         {/* Title & Tags */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-display font-bold mb-2 flex items-center justify-center gap-3">
-            {movieData.title} <span className="text-xl font-normal text-[#9E9E9E]">({movieData.year})</span>
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-display font-bold mb-4 flex items-center justify-center gap-3">
+            {movie.title} <span className="text-2xl font-normal text-[#9E9E9E]">({movie.year})</span>
           </h1>
           <div className="flex justify-center gap-3 mt-4">
-            {movieData.tags.map(tag => (
-              <span key={tag} className="px-3 py-1 border border-white/20 rounded-full text-[10px] tracking-widest text-[#9E9E9E]">{tag}</span>
+            {movie.genre.split('/').map(tag => (
+              <span key={tag} className="px-4 py-1.5 border border-white/20 rounded-full text-xs tracking-widest text-[#9E9E9E] font-accent">{tag.trim().toUpperCase()}</span>
             ))}
           </div>
         </div>
@@ -95,97 +77,114 @@ export default function MovieDetail({ params }: { params: { id: string } }) {
         {activeTab === 'details' ? (
           <div className="animate-fade-in-up pb-32">
             {/* Ratings */}
-            <div className="flex justify-between items-center py-6 border-y border-white/10 mb-8">
+            <div className="flex justify-between items-center py-8 border-y border-white/10 mb-12">
               <div className="text-center">
-                <p className="text-2xl font-bold text-[#00E676]">{movieData.metascore}</p>
-                <p className="text-xs text-[#9E9E9E] mt-1">Metascore</p>
+                <p className="text-3xl font-bold text-[#00E676]">{movie.rating * 20}</p>
+                <p className="text-xs text-[#9E9E9E] mt-1 tracking-widest">METASCORE</p>
               </div>
-              <div className="w-px h-10 bg-white/10"></div>
+              <div className="w-px h-12 bg-white/10"></div>
               <div className="text-center">
-                <p className="text-2xl font-bold flex items-center justify-center gap-1">
-                  <span className="text-[#FF3B3B]">★</span> {movieData.rating}<span className="text-sm text-[#9E9E9E]">/10</span>
+                <p className="text-3xl font-bold flex items-center justify-center gap-2">
+                  <span className="text-[#FF3B3B]">★</span> {movie.rating}<span className="text-sm text-[#9E9E9E]">/5</span>
                 </p>
-                <p className="text-xs text-[#9E9E9E] mt-1">{movieData.reviews}</p>
+                <p className="text-xs text-[#9E9E9E] mt-1 tracking-widest">USER SCORE</p>
               </div>
-              <div className="w-px h-10 bg-white/10"></div>
-              <div className="text-center cursor-pointer hover:text-[#C9A84C] transition-colors">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mx-auto mb-1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                <p className="text-xs mt-1">Rate This</p>
+              <div className="w-px h-12 bg-white/10"></div>
+              <div className="text-center cursor-pointer hover:text-[#C9A84C] transition-colors group">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="mx-auto mb-1 group-hover:scale-110 transition-transform"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <p className="text-xs mt-1 tracking-widest">RATE THIS</p>
               </div>
             </div>
 
             {/* Poster & Info Grid */}
-            <div className="flex gap-6 mb-10">
-              <div className="w-[120px] h-[180px] flex-none relative rounded-xl overflow-hidden shadow-2xl">
-                <Image src={movieData.poster} alt={movieData.title} fill className="object-cover" unoptimized />
+            <div className="flex flex-col sm:flex-row gap-8 mb-12">
+              <div className="w-[180px] h-[270px] mx-auto sm:mx-0 flex-none relative rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/5">
+                <Image src={movie.poster} alt={movie.title} fill className="object-cover" unoptimized />
               </div>
-              <div className="flex flex-col justify-center gap-2 text-sm">
-                <p><span className="text-[#9E9E9E]">Title:</span> {movieData.title}</p>
-                <p><span className="text-[#9E9E9E]">Running Time:</span> {movieData.runtime}</p>
-                <p><span className="text-[#9E9E9E]">Release Date:</span> {movieData.releaseDate}</p>
-                <p><span className="text-[#9E9E9E]">Director:</span> {movieData.director}</p>
-                <p><span className="text-[#9E9E9E]">Writer:</span> {movieData.writer}</p>
+              <div className="flex flex-col justify-center gap-4 text-sm sm:text-base">
+                <p className="flex justify-between sm:justify-start sm:gap-4 border-b border-white/5 pb-2">
+                  <span className="text-[#9E9E9E] min-w-[120px]">Running Time:</span> 
+                  <span className="text-white font-medium">{movie.runtime}</span>
+                </p>
+                <p className="flex justify-between sm:justify-start sm:gap-4 border-b border-white/5 pb-2">
+                  <span className="text-[#9E9E9E] min-w-[120px]">Release Date:</span> 
+                  <span className="text-white font-medium">{movie.releaseDate}</span>
+                </p>
+                <p className="flex justify-between sm:justify-start sm:gap-4 border-b border-white/5 pb-2">
+                  <span className="text-[#9E9E9E] min-w-[120px]">Director:</span> 
+                  <span className="text-white font-medium">{movie.director}</span>
+                </p>
+                <p className="flex justify-between sm:justify-start sm:gap-4 border-b border-white/5 pb-2">
+                  <span className="text-[#9E9E9E] min-w-[120px]">Writer:</span> 
+                  <span className="text-white font-medium">{movie.writer}</span>
+                </p>
               </div>
             </div>
 
             {/* Storyline */}
-            <div className="mb-10">
-              <h3 className="text-lg font-bold mb-3">Storyline</h3>
-              <p className="text-[#9E9E9E] text-sm leading-relaxed">{movieData.storyline}</p>
+            <div className="mb-12">
+              <h3 className="text-xl font-bold mb-4 font-display tracking-wide">STORYLINE</h3>
+              <p className="text-[#9E9E9E] text-base leading-relaxed font-sans">{movie.storyline}</p>
             </div>
 
             {/* Cast & Crew */}
-            <div className="mb-10">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-bold">Full Cast & Crew</h3>
-                <span className="text-xs text-[#9E9E9E] tracking-widest cursor-pointer hover:text-white">SEE ALL</span>
+            <div className="mb-12">
+              <div className="flex justify-between items-center mb-6">
+                <h3 className="text-xl font-bold font-display tracking-wide">CAST & CREW</h3>
+                <span className="text-xs text-[#C9A84C] tracking-[0.2em] cursor-pointer hover:text-white transition-colors">SEE ALL</span>
               </div>
-              <div className="flex gap-4 overflow-x-auto scrollbar-none pb-4">
-                {movieData.cast.map((actor, idx) => (
-                  <div key={idx} className="flex-none w-[90px]">
-                    <div className="w-[90px] h-[90px] rounded-xl overflow-hidden relative mb-2">
-                      <Image src={actor.img} alt={actor.name} fill className="object-cover" unoptimized />
+              <div className="flex gap-6 overflow-x-auto scrollbar-none pb-4">
+                {movie.cast.map((actor, idx) => (
+                  <div key={idx} className="flex-none w-[110px] group cursor-pointer">
+                    <div className="w-[110px] h-[110px] rounded-2xl overflow-hidden relative mb-3 border border-white/5 group-hover:border-[#C9A84C]/50 transition-colors">
+                      <Image src={actor.img} alt={actor.name} fill className="object-cover group-hover:scale-110 transition-transform duration-500" unoptimized />
                     </div>
-                    <p className="text-xs text-center text-[#9E9E9E]">{actor.name}</p>
+                    <p className="text-sm font-bold text-white mb-1">{actor.name}</p>
+                    <p className="text-xs text-[#9E9E9E]">{actor.character}</p>
                   </div>
                 ))}
               </div>
             </div>
             
             {/* Buy Ticket Button */}
-            <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#111114] via-[#111114] to-transparent z-50">
+            <div className="fixed bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-[#111114] via-[#111114] to-transparent z-50">
               <button 
                 onClick={() => setActiveTab('booking')}
-                className="w-full max-w-[800px] mx-auto block py-4 rounded-xl text-white font-bold tracking-widest text-sm bg-gradient-to-r from-[#FF512F] to-[#DD2476] shadow-[0_10px_30px_rgba(221,36,118,0.3)] hover:scale-[1.02] transition-transform"
+                className="w-full max-w-[800px] mx-auto block py-5 rounded-2xl text-white font-bold tracking-[0.2em] text-sm bg-gradient-to-r from-[#FF512F] to-[#DD2476] shadow-[0_15px_35px_rgba(221,36,118,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
-                BUY TICKET
+                BUY TICKETS
               </button>
             </div>
           </div>
         ) : (
-          <div className="animate-fade-in-up">
+          <div className="animate-fade-in-up pb-32">
             {/* Date Selector */}
-            <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+            <div className="flex justify-between items-center mb-10 border-b border-white/10 pb-6">
               {dates.map((d, idx) => (
                 <div 
                   key={idx} 
                   onClick={() => setSelectedDate(idx)}
-                  className={`cursor-pointer transition-colors ${selectedDate === idx ? 'text-white' : 'text-[#5A5A5A]'}`}
+                  className={`cursor-pointer transition-all duration-300 ${selectedDate === idx ? 'text-white scale-110' : 'text-[#5A5A5A] hover:text-[#9E9E9E]'}`}
                 >
-                  <p className={`font-bold ${selectedDate === idx ? 'text-lg' : 'text-sm'}`}>{d.day}</p>
-                  {selectedDate === idx && <div className="w-1/2 h-1 bg-gradient-to-r from-[#FF512F] to-[#DD2476] mx-auto mt-2 rounded-full"></div>}
+                  <p className={`font-bold tracking-wider ${selectedDate === idx ? 'text-xl' : 'text-sm'}`}>{d.day}</p>
+                  {selectedDate === idx && <div className="w-1/2 h-1 bg-gradient-to-r from-[#FF512F] to-[#DD2476] mx-auto mt-3 rounded-full"></div>}
                 </div>
               ))}
             </div>
 
             {/* Screening Type */}
-            <div className="mb-6">
-              <p className="text-xs text-[#9E9E9E] mb-2">Screening Type</p>
-              <select className="w-full bg-transparent border border-white/20 rounded-lg p-3 text-white focus:outline-none focus:border-white appearance-none">
-                <option value="2d" className="bg-[#111114]">2D</option>
-                <option value="3d" className="bg-[#111114]">3D</option>
-                <option value="imax" className="bg-[#111114]">IMAX</option>
-              </select>
+            <div className="mb-8">
+              <p className="text-xs text-[#9E9E9E] mb-3 tracking-widest">SCREENING TYPE</p>
+              <div className="relative">
+                <select className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-[#C9A84C]/50 appearance-none font-accent">
+                  <option value="2d" className="bg-[#111114]">2D EXPERIENCE</option>
+                  <option value="3d" className="bg-[#111114]">3D EXPERIENCE</option>
+                  <option value="imax" className="bg-[#111114]">IMAX EXPERIENCE</option>
+                </select>
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-[#9E9E9E]">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 9l6 6 6-6"/></svg>
+                </div>
+              </div>
             </div>
 
             {/* Time Grid */}
@@ -194,25 +193,25 @@ export default function MovieDetail({ params }: { params: { id: string } }) {
                 <div 
                   key={idx} 
                   onClick={() => setSelectedTime(idx)}
-                  className={`border rounded-xl p-4 text-center cursor-pointer transition-all ${selectedTime === idx ? 'border-white bg-white/5 shadow-lg' : 'border-white/10 hover:border-white/30'}`}
+                  className={`border rounded-2xl p-5 text-center cursor-pointer transition-all duration-300 ${selectedTime === idx ? 'border-white bg-white/10 shadow-[0_10px_30px_rgba(255,255,255,0.1)] scale-[1.02]' : 'border-white/10 hover:border-white/30 hover:bg-white/5'}`}
                 >
-                  <p className="font-bold text-lg mb-1">{t.time}</p>
-                  <p className="text-xs text-[#9E9E9E]">{t.price}</p>
+                  <p className="font-bold text-xl mb-1 font-accent">{t.time}</p>
+                  <p className="text-xs text-[#C9A84C] tracking-widest">{t.price}</p>
                 </div>
               ))}
             </div>
 
             {/* Choose Seats Button */}
-            <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#111114] via-[#111114] to-transparent z-50">
+            <div className="fixed bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-[#111114] via-[#111114] to-transparent z-50">
               <button 
                 onClick={() => {
-                  if (selectedTime === null) alert("Please select a time.");
-                  else alert("Proceeding to seat selection...");
+                  if (selectedTime === null) alert("Please select a showtime.");
+                  else alert("Proceeding to seat selection for " + movie.title);
                 }}
-                className="w-full max-w-[800px] mx-auto flex justify-center items-center gap-2 py-4 rounded-xl text-white font-bold tracking-widest text-sm bg-gradient-to-r from-[#FF512F] to-[#DD2476] shadow-[0_10px_30px_rgba(221,36,118,0.3)] hover:scale-[1.02] transition-transform"
+                className="w-full max-w-[800px] mx-auto flex justify-center items-center gap-3 py-5 rounded-2xl text-white font-bold tracking-[0.2em] text-sm bg-gradient-to-r from-[#FF512F] to-[#DD2476] shadow-[0_15px_35px_rgba(221,36,118,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
                 CHOOSE SEATS
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="animate-pulse"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </button>
             </div>
           </div>
