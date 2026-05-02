@@ -100,8 +100,6 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [toasts, setToasts] = useState<{ id: number; msg: string; type: string }[]>([]);
-  const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
-  const [isCursorHovered, setIsCursorHovered] = useState(false);
   const [seatModalOpen, setSeatModalOpen] = useState(false);
   const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [activeDate, setActiveDate] = useState(0);
@@ -179,13 +177,6 @@ export default function Home() {
       }
     };
 
-    // 3. Cursor Tracking
-    const handleMouseMove = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
-      const target = e.target as HTMLElement;
-      setIsCursorHovered(!!target.closest('a, button, select, .cursor-pointer, .movie-card, .coming-card, .seat-btn'));
-    };
-
     // 4. Reveal Animation (Intersection Observer)
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -225,7 +216,6 @@ export default function Home() {
     }, 5000);
 
     window.addEventListener("scroll", handleScroll);
-    window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
@@ -233,7 +223,6 @@ export default function Home() {
       clearInterval(carouselAutoScroll);
       clearInterval(heroAutoScroll);
       window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("keydown", handleKeyDown);
       observer.disconnect();
     };
@@ -335,12 +324,6 @@ export default function Home() {
         <div className="loader-text">CINEVISTA</div>
       </div>
 
-      {/* Custom Cursor */}
-      <div 
-        className={`cursor ${isCursorHovered ? 'hovered' : ''}`}
-        style={{ left: cursorPos.x, top: cursorPos.y }}
-        aria-hidden="true"
-      />
 
       {/* Toast System */}
       <div className="fixed top-8 right-8 z-[10001] flex flex-col gap-4 pointer-events-none" aria-live="polite">
@@ -440,8 +423,8 @@ export default function Home() {
               className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${activeHeroIndex === idx ? 'opacity-100 z-0' : 'opacity-0 z-[-1]'}`}
               aria-hidden="true"
             >
-              <Image src={movie.img} alt="" fill className="object-cover scale-[1.02] filter blur-xl brightness-[0.3]" unoptimized />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0B] via-[#0A0A0B]/80 to-transparent"></div>
+              <Image src={movie.img} alt="" fill className="object-cover scale-[1.02] filter blur-sm brightness-50" unoptimized />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0B] via-[#0A0A0B]/60 to-transparent"></div>
               <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] via-transparent to-transparent"></div>
             </div>
           ))}
@@ -472,10 +455,10 @@ export default function Home() {
                      </div>
                      
                      <div className="flex flex-wrap gap-5">
-                       <a href="#showtimes" className="btn-primary group">
+                       <Link href="/movie/dunkirk" className="btn-primary group">
                          Book Tickets
                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                       </a>
+                       </Link>
                        <button className="btn-ghost-dark group" onClick={() => addToast(t('toast_trailer'))}>
                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="group-hover:scale-110 transition-transform"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>
                          Watch Trailer
@@ -628,18 +611,18 @@ export default function Home() {
                 { title: "Dhanaya (ධනය)", date: "August 2025", lang: "සිං", img: STILL_3 },
                 { title: "Vettaiyan 2", date: "September 2025", lang: "தமிழ்", img: STILL_4 }
               ].map((movie, idx) => (
-                <div key={idx} className={`coming-card group reveal reveal-delay-${idx + 1}`}>
+                <Link href="/movie/dunkirk" key={idx} className={`coming-card block group reveal reveal-delay-${idx + 1}`}>
                   <Image src={movie.img} alt={movie.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110 group-hover:brightness-50" unoptimized />
                   <span className="absolute top-4 left-4 bg-[#C9A84C] text-black px-3 py-1 rounded-full font-accent text-sm tracking-wider">COMING {movie.date.split(' ')[0].toUpperCase()}</span>
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent flex flex-col justify-end p-6">
                     <h3 className="font-display text-2xl mb-1">{movie.title}</h3>
                     <p className="text-[#9E9E9E] text-sm mb-4">{movie.date}</p>
-                    <button className="btn-ghost-dark py-2 px-4 text-xs group/btn" onClick={() => addToast(t('toast_remind'))} data-i18n="btn_remind_me">
+                    <button className="btn-ghost-dark py-2 px-4 text-xs group/btn relative z-10" onClick={(e) => { e.preventDefault(); addToast(t('toast_remind')); }} data-i18n="btn_remind_me">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="group-hover/btn:rotate-12" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                       {t('btn_remind_me')}
                     </button>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

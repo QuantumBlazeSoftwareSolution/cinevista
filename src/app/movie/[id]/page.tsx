@@ -93,7 +93,7 @@ export default function MovieDetail({ params }: { params: { id: string } }) {
         </div>
 
         {activeTab === 'details' ? (
-          <div className="animate-fade-in-up">
+          <div className="animate-fade-in-up pb-32">
             {/* Ratings */}
             <div className="flex justify-between items-center py-6 border-y border-white/10 mb-8">
               <div className="text-center">
