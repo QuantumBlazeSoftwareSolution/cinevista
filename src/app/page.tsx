@@ -83,11 +83,11 @@ const i18nData = {
 };
 
 const MOVIES = [
-  { title: "Avengers: Doomsday", lang: "EN", format: "IMAX", genre: "Action/Sci-Fi", rating: 4.5, runtime: "2h 36m", img: POSTER_1, color: "#00D4FF" },
-  { title: "Aakasame Nuvvu (ආකාශමේ)", lang: "සිං", format: "2D", genre: "Drama/Romance", rating: 4.2, runtime: "2h 05m", img: POSTER_2, color: "#FFB74D" },
-  { title: "Kalki 2898-AD", lang: "हिं", format: "Dolby", genre: "Epic/Sci-Fi", rating: 4.7, runtime: "3h 01m", img: POSTER_3, color: "#CE93D8" },
-  { title: "Ponniyin Selvan III", lang: "தமிழ்", format: "IMAX", genre: "Historical/Epic", rating: 4.8, runtime: "2h 55m", img: POSTER_4, color: "#F48FB1" },
-  { title: "Mission: Impossible 8", lang: "EN", format: "Dolby", genre: "Action/Thriller", rating: 4.6, runtime: "2h 48m", img: POSTER_5, color: "#00D4FF" },
+  { title: "Avengers: Doomsday", lang: "EN", format: "IMAX", genre: "Action/Sci-Fi", rating: 4.9, runtime: "2h 45m", img: POSTER_1, color: "#00D4FF" },
+  { title: "The Batman Part II", lang: "EN", format: "Dolby", genre: "Action/Crime", rating: 4.8, runtime: "2h 55m", img: POSTER_2, color: "#FF3B3B" },
+  { title: "Aakasame Nuvvu (ආකාශමේ)", lang: "සිං", format: "2D", genre: "Drama/Romance", rating: 4.2, runtime: "2h 05m", img: POSTER_3, color: "#FFB74D" },
+  { title: "Avatar: Fire and Ash", lang: "EN", format: "IMAX 3D", genre: "Sci-Fi/Adventure", rating: 4.7, runtime: "3h 12m", img: POSTER_4, color: "#00E676" },
+  { title: "Mission: Impossible 8", lang: "EN", format: "IMAX", genre: "Action/Adventure", rating: 4.6, runtime: "2h 38m", img: POSTER_5, color: "#00D4FF" },
   { title: "Sudu Suwanda (සුදු සුවඳ)", lang: "සිං", format: "2D", genre: "Romance/Drama", rating: 4.0, runtime: "1h 58m", img: POSTER_6, color: "#FFB74D" }
 ];
 
@@ -607,9 +607,9 @@ export default function Home() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 reveal reveal-delay-1">
               {[
                 { title: "Superman (2025)", date: "June 2025", lang: "EN", img: STILL_1 },
-                { title: "Pushpa 3 (2025)", date: "July 2025", lang: "हिं", img: STILL_2 },
-                { title: "Dhanaya (ධනය)", date: "August 2025", lang: "සිං", img: STILL_3 },
-                { title: "Vettaiyan 2", date: "September 2025", lang: "தமிழ்", img: STILL_4 }
+                { title: "Spider-Man 4", date: "December 2025", lang: "EN", img: STILL_2 },
+                { title: "Dhanaya (ධනය)", date: "January 2026", lang: "සිං", img: STILL_3 },
+                { title: "Fantastic Four", date: "February 2026", lang: "EN", img: STILL_4 }
               ].map((movie, idx) => (
                 <Link href="/movie/dunkirk" key={idx} className={`coming-card block group reveal reveal-delay-${idx + 1}`}>
                   <Image src={movie.img} alt={movie.title} fill className="object-cover transition-transform duration-700 group-hover:scale-110 group-hover:brightness-50" unoptimized />

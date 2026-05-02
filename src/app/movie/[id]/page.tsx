@@ -6,26 +6,26 @@ import Link from 'next/link';
 
 // Mock Data
 const movieData = {
-  id: "dunkirk",
-  title: "Dunkirk",
-  year: "2017",
-  tags: ["ACTION", "DRAMA", "HISTORY"],
-  metascore: 9.4,
-  rating: "8.1",
-  reviews: "109 Reviews",
-  runtime: "1h 46min",
-  releaseDate: "31.08.2017",
-  director: "Christopher Nolan",
-  writer: "Christopher Nolan",
-  storyline: "Miraculous evacuation of Allied soldiers from Belgium, Britain, Canada, and France, who were cut off and surrounded by the German army from the beaches and harbor of Dunkirk, France, during the Battle of France in World War II.",
+  id: "avengers-doomsday",
+  title: "Avengers: Doomsday",
+  year: "2026",
+  tags: ["ACTION", "SCI-FI", "IMAX"],
+  metascore: 9.8,
+  rating: "9.2",
+  reviews: "45K Reviews",
+  runtime: "2h 45min",
+  releaseDate: "01.05.2026",
+  director: "Anthony & Joe Russo",
+  writer: "Stephen McFeely",
+  storyline: "The Avengers face their greatest threat yet as Victor von Doom emerges from the multiverse to reshape reality in his own image. A cosmic battle that spans dimensions and tests the limits of every hero.",
   cast: [
-    { name: "Fionn Whitehead", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&fit=crop" },
-    { name: "Tom Hardy", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&fit=crop" },
-    { name: "Aneurin Barnard", img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&fit=crop" },
-    { name: "Mark Rylance", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&fit=crop" }
+    { name: "Robert Downey Jr.", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&fit=crop" },
+    { name: "Tom Holland", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&fit=crop" },
+    { name: "Benedict Cumberbatch", img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&fit=crop" },
+    { name: "Chris Hemsworth", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&fit=crop" }
   ],
-  poster: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=600&fit=crop", // Cinema poster vibe
-  bg: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=1200&fit=crop" // Cinema bg
+  poster: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=600&fit=crop",
+  bg: "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?w=1200&fit=crop"
 };
 
 export default function MovieDetail({ params }: { params: { id: string } }) {
