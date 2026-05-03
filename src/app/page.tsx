@@ -92,10 +92,22 @@ export default function Home() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
+  const [dynamicThemeColor, setDynamicThemeColor] = useState("#C9A84C");
   
   const carouselRef = useRef<HTMLDivElement>(null);
   const heroContentRef = useRef<HTMLDivElement>(null);
   const heroVideoRef = useRef<HTMLVideoElement>(null);
+
+  /* ============================================================
+     COLOR EXTRACTION
+  ============================================================ */
+  useEffect(() => {
+    import("@/utils/colorExtractor").then(({ getDominantColor }) => {
+      getDominantColor(MOVIES[activeHeroIndex].poster).then(color => {
+        setDynamicThemeColor(color);
+      });
+    });
+  }, [activeHeroIndex]);
 
   /* ============================================================
      CALLBACKS
@@ -408,7 +420,19 @@ export default function Home() {
               aria-hidden="true"
             >
               <Image src={movie.poster} alt="" fill className="object-cover scale-[1.02] filter blur-sm brightness-50" unoptimized />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0B] via-[#0A0A0B]/60 to-transparent"></div>
+              
+              {/* Dynamic Atmosphere Glow */}
+              <div 
+                className="absolute left-[-10%] top-[20%] w-[60%] h-[60%] rounded-full opacity-30 blur-[120px] transition-all duration-1000"
+                style={{ backgroundColor: dynamicThemeColor }}
+              ></div>
+              
+              <div 
+                className="absolute inset-0 transition-all duration-1000"
+                style={{ 
+                  background: `linear-gradient(to right, #0A0A0B 0%, #0A0A0B 5%, transparent 100%)` 
+                }}
+              ></div>
               <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] via-transparent to-transparent"></div>
             </div>
           ))}
@@ -423,7 +447,9 @@ export default function Home() {
                  activeHeroIndex === idx && (
                    <div key={`content-${idx}`} className="animate-fade-in-up w-full">
                      <div className="flex flex-wrap gap-3 mb-6">
-                       <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full font-accent text-sm tracking-widest text-[#C9A84C] border border-[#C9A84C]/30">{movie.format}</span>
+                       <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full font-accent text-sm tracking-widest text-[#C9A84C] border border-[#C9A84C]/30">
+                        {movie.format}
+                       </span>
                        <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full font-accent text-sm tracking-widest text-white border border-white/10">{movie.lang}</span>
                        <span className="px-3 py-1 bg-white/10 backdrop-blur-md rounded-full font-accent text-sm tracking-widest text-white border border-white/10">{movie.rating} ★</span>
                      </div>
@@ -434,7 +460,7 @@ export default function Home() {
                      
                      <div className="flex items-center gap-4 text-[#9E9E9E] mb-10 text-sm sm:text-base font-sans">
                         <span>{movie.genre}</span>
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#C9A84C]"></span>
+                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: dynamicThemeColor }}></span>
                         <span>{movie.runtime}</span>
                      </div>
                      
@@ -443,7 +469,10 @@ export default function Home() {
                          Book Tickets
                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                        </Link>
-                       <button className="btn-ghost-dark group" onClick={() => addToast(t('toast_trailer'))}>
+                       <button 
+                        className="btn-ghost-dark group border-[#00D4FF] hover:border-[#00D4FF]/50 transition-all duration-500" 
+                        onClick={() => addToast(t('toast_trailer'))}
+                       >
                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="group-hover:scale-110 transition-transform"><circle cx="12" cy="12" r="10"/><path d="M10 8l6 4-6 4V8z"/></svg>
                          Watch Trailer
                        </button>
