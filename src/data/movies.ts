@@ -132,6 +132,30 @@ export const MOVIES: Movie[] = [
     trailerId: "https://www.youtube.com/embed/dQw4w9WgXcQ",
     color: "#00D4FF",
     isComingSoon: true
+  },
+  {
+    id: "spiderman-beyond",
+    title: "Spider-Man: Beyond the Spider-Verse",
+    year: "2026",
+    lang: "EN",
+    format: "IMAX",
+    genre: "Animation/Action",
+    rating: 4.9,
+    runtime: "2h 20m",
+    releaseDate: "March 27, 2026",
+    director: "Joaquim Dos Santos",
+    writer: "Phil Lord & Christopher Miller",
+    storyline: "Miles Morales embark on a final, multiverse-spanning adventure to save every universe from the threat of the Spot and find his way home.",
+    cast: [
+      { name: "Shameik Moore", character: "Miles Morales", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&fit=crop" },
+      { name: "Hailee Steinfeld", character: "Gwen Stacy", img: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&fit=crop" },
+      { name: "Oscar Isaac", character: "Miguel O'Hara", img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&fit=crop" },
+      { name: "Jason Schwartzman", character: "The Spot", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&fit=crop" }
+    ],
+    poster: "https://images.unsplash.com/photo-1635805737707-575885ab0820?w=600&fit=crop",
+    bg: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=1200&fit=crop",
+    trailerId: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    color: "#FFD700"
   }
 ];
 
