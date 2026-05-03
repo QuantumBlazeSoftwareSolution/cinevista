@@ -59,8 +59,8 @@ export default function RootLayout({
         <link rel="alternate" href="https://cinevista.lk/hi" hrefLang="hi" />
       </head>
       <body className="antialiased">
-        <CustomCursor />
         {children}
+        <CustomCursor />
       </body>
     </html>
   );
