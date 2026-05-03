@@ -316,7 +316,7 @@ export default function Home() {
       
       {/* Loading Screen */}
       <div id="loader" className={!loading ? "exit" : ""} role="alert" aria-busy={loading}>
-        <div className="relative w-[80vw] max-w-[800px] h-[300px] animate-pulse">
+        <div className="relative w-[90vw] max-w-[1200px] h-[500px] animate-pulse">
           <Image src="/logo.png" alt="CineVista Loading..." fill className="object-contain" priority />
         </div>
       </div>
@@ -352,7 +352,7 @@ export default function Home() {
       <header className={`nav-bar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="max-w-[1400px] mx-auto px-6 flex justify-between items-center h-full">
           <a href="#" className="flex items-center gap-3 no-underline group" aria-label="CineVista Home">
-            <div className="relative w-64 h-20 group-hover:scale-105 transition-transform duration-500">
+            <div className="relative w-80 h-28 group-hover:scale-105 transition-transform duration-500">
               <Image src="/logo.png" alt="CineVista Logo" fill className="object-contain object-left" />
             </div>
           </a>
@@ -1047,7 +1047,7 @@ export default function Home() {
             {/* Column 1: Brand */}
             <div className="col-span-1">
               <div className="flex items-center gap-3 mb-6">
-                <div className="relative w-64 h-16">
+                <div className="relative w-72 h-24">
                   <Image src="/logo.png" alt="CineVista Logo" fill className="object-contain object-left" />
                 </div>
               </div>
