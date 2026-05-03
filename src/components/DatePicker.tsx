@@ -1,28 +1,35 @@
 "use client";
 
-import React, { useState } from 'react';
-import { 
-  format, 
-  addMonths, 
-  subMonths, 
-  startOfMonth, 
-  endOfMonth, 
-  startOfWeek, 
-  endOfWeek, 
-  isSameMonth, 
-  isSameDay, 
-  addDays, 
-  isBefore, 
-  startOfToday
-} from 'date-fns';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  format,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  isSameMonth,
+  isSameDay,
+  addDays,
+  isBefore,
+  startOfToday,
+} from "date-fns";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Calendar as CalendarIcon,
+} from "lucide-react";
 
 interface DatePickerProps {
   selectedDate: Date;
   onDateSelect: (date: Date) => void;
 }
 
-export default function DatePicker({ selectedDate, onDateSelect }: DatePickerProps) {
+export default function DatePicker({
+  selectedDate,
+  onDateSelect,
+}: DatePickerProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const today = startOfToday();
 
@@ -32,7 +39,7 @@ export default function DatePicker({ selectedDate, onDateSelect }: DatePickerPro
         <div className="flex items-center gap-2">
           <CalendarIcon className="w-4 h-4 text-[#C9A84C]" />
           <span className="text-sm font-bold tracking-widest uppercase font-display">
-            {format(currentMonth, 'MMMM yyyy')}
+            {format(currentMonth, "MMMM yyyy")}
           </span>
         </div>
         <div className="flex gap-2">
@@ -54,11 +61,14 @@ export default function DatePicker({ selectedDate, onDateSelect }: DatePickerPro
   };
 
   const renderDays = () => {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     return (
       <div className="grid grid-cols-7 mb-2">
         {days.map((day) => (
-          <div key={day} className="text-center text-[10px] font-bold text-[#5A5A5A] uppercase tracking-tighter py-2">
+          <div
+            key={day}
+            className="text-center text-[10px] font-bold text-[#5A5A5A] uppercase tracking-tighter py-2"
+          >
             {day}
           </div>
         ))}
@@ -97,22 +107,24 @@ export default function DatePicker({ selectedDate, onDateSelect }: DatePickerPro
             {isSelected && (
               <div className="absolute inset-1 bg-gradient-to-br from-[#C9A84C] to-[#8B732E] rounded-xl shadow-[0_0_15px_rgba(201,168,76,0.3)] animate-in fade-in zoom-in duration-300"></div>
             )}
-            <span className={`relative text-xs font-bold font-accent
+            <span
+              className={`relative text-xs font-bold font-accent
               ${isSelected ? "text-black" : isCurrentMonth ? "text-[#9E9E9E] group-hover:text-white" : "text-[#5A5A5A]"}
-            `}>
+            `}
+            >
               {formattedDate}
             </span>
             {isSameDay(day, today) && !isSelected && (
               <div className="absolute bottom-2 w-1 h-1 bg-[#C9A84C] rounded-full"></div>
             )}
-          </div>
+          </div>,
         );
         day = addDays(day, 1);
       }
       rows.push(
         <div className="grid grid-cols-7" key={day.toString()}>
           {days}
-        </div>
+        </div>,
       );
       days = [];
     }
@@ -120,7 +132,7 @@ export default function DatePicker({ selectedDate, onDateSelect }: DatePickerPro
   };
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md shadow-2xl animate-fade-in-up">
+    <div className="w-full bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md shadow-2xl animate-fade-in-up">
       {renderHeader()}
       {renderDays()}
       {renderCells()}

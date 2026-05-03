@@ -316,13 +316,9 @@ export default function Home() {
       
       {/* Loading Screen */}
       <div id="loader" className={!loading ? "exit" : ""} role="alert" aria-busy={loading}>
-        <div className="relative">
-          <svg className="loader-reel" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="40" fill="none" stroke="#C9A84C" strokeWidth="2" />
-            <circle cx="50" cy="50" r="15" fill="none" stroke="#00D4FF" strokeWidth="1" />
-          </svg>
+        <div className="relative w-[80vw] max-w-[800px] h-[300px] animate-pulse">
+          <Image src="/logo.png" alt="CineVista Loading..." fill className="object-contain" priority />
         </div>
-        <div className="loader-text">CINEVISTA</div>
       </div>
 
 
@@ -356,10 +352,9 @@ export default function Home() {
       <header className={`nav-bar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="max-w-[1400px] mx-auto px-6 flex justify-between items-center h-full">
           <a href="#" className="flex items-center gap-3 no-underline group" aria-label="CineVista Home">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="2" className="group-hover:rotate-45 transition-transform duration-500" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/>
-            </svg>
-            <span className="font-display text-[#C9A84C] text-2xl font-bold tracking-tight">CineVista</span>
+            <div className="relative w-64 h-20 group-hover:scale-105 transition-transform duration-500">
+              <Image src="/logo.png" alt="CineVista Logo" fill className="object-contain object-left" />
+            </div>
           </a>
 
           <nav className="hidden lg:flex gap-8">
@@ -1052,8 +1047,9 @@ export default function Home() {
             {/* Column 1: Brand */}
             <div className="col-span-1">
               <div className="flex items-center gap-3 mb-6">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
-                <span className="font-display text-[#C9A84C] text-2xl font-bold">CineVista</span>
+                <div className="relative w-64 h-16">
+                  <Image src="/logo.png" alt="CineVista Logo" fill className="object-contain object-left" />
+                </div>
               </div>
               <p className="text-[#9E9E9E] italic mb-6 leading-relaxed font-sans text-lg">&quot;I didn&apos;t just watch a movie; I experienced it. CineVista&apos;s premium service is unmatched in the country.&quot;</p>
               <div className="flex gap-4">

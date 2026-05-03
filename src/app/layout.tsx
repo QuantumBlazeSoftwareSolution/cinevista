@@ -38,6 +38,9 @@ export const metadata: Metadata = {
     description: "Book tickets for the latest blockbusters at CineVista Colombo.",
     images: ["/assets/og-image.jpg"],
   },
+  icons: {
+    icon: '/logo.png',
+  },
 };
 
 import CustomCursor from "@/components/CustomCursor";
@@ -60,7 +63,6 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         {children}
-        <CustomCursor />
       </body>
     </html>
   );

@@ -293,7 +293,7 @@ export default function MovieDetail({ params }: { params: { id: string } }) {
             </div>
 
             {showCalendar ? (
-              <div className="mb-12 max-w-sm mx-auto">
+              <div className="mb-12 w-full max-w-[350px] mx-auto">
                 <DatePicker 
                   selectedDate={selectedFullDate} 
                   onDateSelect={(date) => { setSelectedFullDate(date); setShowCalendar(false); }} 
