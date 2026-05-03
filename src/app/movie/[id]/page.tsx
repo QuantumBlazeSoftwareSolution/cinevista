@@ -128,7 +128,7 @@ export default function MovieDetail({ params }: { params: { id: string } }) {
             </div>
 
             {/* Cast & Crew */}
-            <div className="mb-12">
+            <div className="mb-16">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-bold font-display tracking-wide">CAST & CREW</h3>
                 <span className="text-xs text-[#C9A84C] tracking-[0.2em] cursor-pointer hover:text-white transition-colors">SEE ALL</span>
@@ -141,6 +141,51 @@ export default function MovieDetail({ params }: { params: { id: string } }) {
                     </div>
                     <p className="text-sm font-bold text-white mb-1">{actor.name}</p>
                     <p className="text-xs text-[#9E9E9E]">{actor.character}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Audience Reviews */}
+            <div className="mb-12">
+              <div className="flex justify-between items-center mb-8">
+                <h3 className="text-xl font-bold font-display tracking-wide">AUDIENCE REVIEWS</h3>
+                <button className="text-xs border border-white/20 px-4 py-2 rounded-lg tracking-widest hover:bg-white hover:text-black transition-all">WRITE A REVIEW</button>
+              </div>
+
+              <div className="space-y-6">
+                {movie.reviewsData?.map((review, idx) => (
+                  <div key={idx} className="bg-white/5 border border-white/5 p-6 rounded-2xl hover:border-white/10 transition-all">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FF512F] to-[#DD2476] flex items-center justify-center font-bold text-sm">
+                          {review.user.charAt(0)}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-sm flex items-center gap-2">
+                            {review.user}
+                            {review.isVerified && (
+                              <span className="flex items-center gap-1 text-[9px] bg-[#00E676]/20 text-[#00E676] px-1.5 py-0.5 rounded-full tracking-tighter uppercase font-bold">
+                                <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                                Verified
+                              </span>
+                            )}
+                          </h4>
+                          <p className="text-[10px] text-[#9E9E9E] mt-0.5 uppercase tracking-widest font-accent">{review.date}</p>
+                        </div>
+                      </div>
+                      <div className="flex text-[#FF3B3B] text-xs">
+                        {"★".repeat(review.rating)}
+                        {"☆".repeat(5 - review.rating)}
+                      </div>
+                    </div>
+                    <p className="text-[#9E9E9E] text-sm leading-relaxed italic">&quot;{review.comment}&quot;</p>
+                    <div className="mt-4 flex gap-4">
+                      <button className="text-[10px] text-[#C9A84C] flex items-center gap-1 hover:underline">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                        Helpful
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>

@@ -204,10 +204,7 @@ export default function Home() {
       }
     }, 5000);
 
-    // 7. Hero Auto-Scroll
-    const heroAutoScroll = setInterval(() => {
-      setActiveHeroIndex(prev => (prev + 1) % MOVIES.length);
-    }, 5000);
+
 
     window.addEventListener("scroll", handleScroll);
     window.addEventListener("keydown", handleKeyDown);
@@ -215,12 +212,19 @@ export default function Home() {
     return () => {
       clearTimeout(timer);
       clearInterval(carouselAutoScroll);
-      clearInterval(heroAutoScroll);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("keydown", handleKeyDown);
       observer.disconnect();
     };
   }, [handleCarouselScroll, isDragging]);
+
+  // Dedicated Hero Auto-Scroll with Reset on Interaction
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveHeroIndex(prev => (prev + 1) % MOVIES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [activeHeroIndex]);
 
   // Update Carousel Index for Dots
   useEffect(() => {
@@ -464,8 +468,8 @@ export default function Home() {
             </div>
 
             {/* Right Mini Carousel */}
-            <div className="hidden lg:flex lg:col-span-5 justify-end relative h-[500px]">
-              <div className="relative w-full h-full flex items-center justify-center" style={{ perspective: '1200px' }}>
+            <div className="hidden lg:flex lg:col-span-5 flex-col items-center justify-center h-[500px]">
+              <div className="relative w-full h-[400px] flex items-center justify-center" style={{ perspective: '1200px' }}>
                 {MOVIES.map((movie, idx) => {
                   let offset = idx - activeHeroIndex;
                   if (offset < -Math.floor(MOVIES.length / 2)) offset += MOVIES.length;
@@ -493,6 +497,24 @@ export default function Home() {
                     </div>
                   );
                 })}
+              </div>
+
+              {/* Manual Controls */}
+              <div className="flex gap-4 mt-8">
+                <button 
+                  onClick={() => setActiveHeroIndex((prev) => (prev - 1 + MOVIES.length) % MOVIES.length)}
+                  className="w-12 h-12 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-white flex items-center justify-center hover:bg-[#C9A84C] hover:border-[#C9A84C] hover:text-black transition-all group shadow-xl"
+                  aria-label="Previous Movie"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-active:scale-90 transition-transform"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button 
+                  onClick={() => setActiveHeroIndex((prev) => (prev + 1) % MOVIES.length)}
+                  className="w-12 h-12 rounded-full border border-white/20 bg-white/5 backdrop-blur-md text-white flex items-center justify-center hover:bg-[#C9A84C] hover:border-[#C9A84C] hover:text-black transition-all group shadow-xl"
+                  aria-label="Next Movie"
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-active:scale-90 transition-transform"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
               </div>
             </div>
             

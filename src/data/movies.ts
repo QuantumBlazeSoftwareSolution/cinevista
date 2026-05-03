@@ -17,6 +17,14 @@ export interface Movie {
   trailerId: string;
   color: string;
   isComingSoon?: boolean;
+  reviewsData?: {
+    user: string;
+    avatar?: string;
+    rating: number;
+    date: string;
+    comment: string;
+    isVerified: boolean;
+  }[];
 }
 
 export const MOVIES: Movie[] = [
@@ -42,7 +50,12 @@ export const MOVIES: Movie[] = [
     poster: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?w=600&fit=crop",
     bg: "https://images.unsplash.com/photo-1618336753974-aae8e04506aa?w=1200&fit=crop",
     trailerId: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    color: "#00D4FF"
+    color: "#00D4FF",
+    reviewsData: [
+      { user: "Kasun Perera", rating: 5, date: "2 days ago", comment: "Absolutely mind-blowing! RDJ as Doom is the best casting decision ever. The IMAX experience was out of this world.", isVerified: true },
+      { user: "Sarah J.", rating: 4, date: "1 week ago", comment: "Great movie, but a bit long. The visual effects are definitely the highlight of 2026.", isVerified: true },
+      { user: "Nuwan Silva", rating: 5, date: "3 days ago", comment: "Best Avengers movie since Endgame. Period.", isVerified: true }
+    ]
   },
   {
     id: "the-batman-2",
@@ -66,7 +79,10 @@ export const MOVIES: Movie[] = [
     poster: "https://images.unsplash.com/photo-1509248961158-e54f6934749c?w=600&fit=crop",
     bg: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1200&fit=crop",
     trailerId: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    color: "#FF3B3B"
+    color: "#FF3B3B",
+    reviewsData: [
+      { user: "Dimuthu", rating: 5, date: "Just now", comment: "Dark, gritty, and perfect. Pattinson IS Batman. The cinematography is award-worthy.", isVerified: true }
+    ]
   },
   {
     id: "avatar-fire-ash",
