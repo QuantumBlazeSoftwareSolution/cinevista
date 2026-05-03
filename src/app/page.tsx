@@ -8,19 +8,10 @@ import { MOVIES, COMING_SOON } from "@/data/movies";
 /* ============================================================
    ASSETS & DATA
 ============================================================ */
-const HERO_VIDEO = "assets/hero-reel.mp4";
 const HERO_POSTER = "https://images.unsplash.com/photo-1517604401119-2b01053c0bc6?auto=format&fit=crop&q=80&w=1920";
 const POSTER_1 = "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?auto=format&fit=crop&q=80&w=600&h=900"; 
 const POSTER_2 = "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&q=80&w=600&h=900"; 
-const POSTER_3 = "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=600&h=900"; 
-const POSTER_4 = "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&q=80&w=600&h=900"; 
-const POSTER_5 = "https://images.unsplash.com/photo-1509281373149-e957c6296406?auto=format&fit=crop&q=80&w=600&h=900";
-const POSTER_6 = "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=600&h=900";
 
-const STILL_1 = "https://images.unsplash.com/photo-1535016120720-40c746a6580c?auto=format&fit=crop&q=80&w=800&h=450"; 
-const STILL_2 = "https://images.unsplash.com/photo-1542204165-65bf26472b9b?auto=format&fit=crop&q=80&w=800&h=450"; 
-const STILL_3 = "https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&q=80&w=800&h=450"; 
-const STILL_4 = "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=800&h=450";
 
 /* ============================================================
    i18n CONFIG
@@ -89,7 +80,7 @@ export default function Home() {
   /* ============================================================
      STATE & REFS
   ============================================================ */
-  const [lang, setLang] = useState<keyof typeof i18nData>("en");
+  const [lang, setLang] = useState<'en' | 'si' | 'ta' | 'hi'>("en");
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -110,7 +101,7 @@ export default function Home() {
      CALLBACKS
   ============================================================ */
   const t = useCallback((key: keyof typeof i18nData['en']) => {
-    return (i18nData[lang] as any)[key] || i18nData['en'][key] || key;
+    return (i18nData[lang] as Record<string, string>)[key] || i18nData['en'][key] || key;
   }, [lang]);
 
   const addToast = useCallback((msg: string, type = "info") => {
@@ -370,12 +361,7 @@ export default function Home() {
 
           <div className="hidden lg:flex items-center gap-6">
             <div className="relative group/lang">
-              <select 
-                className="bg-transparent border-none text-[#F0EDE8] outline-none cursor-pointer font-medium appearance-none pr-4"
-                value={lang}
-                onChange={(e) => setLang(e.target.value as any)}
-                aria-label="Select Language"
-              >
+              <select className="bg-transparent text-white border-none focus:ring-0 text-sm font-accent cursor-pointer" value={lang} onChange={(e) => setLang(e.target.value as 'en' | 'si' | 'ta' | 'hi')}>
                 <option value="en" className="text-black">EN</option>
                 <option value="si" className="text-black">සිං</option>
                 <option value="ta" className="text-black">தமிழ்</option>
@@ -475,11 +461,11 @@ export default function Home() {
                   if (offset < -Math.floor(MOVIES.length / 2)) offset += MOVIES.length;
                   if (offset > Math.floor(MOVIES.length / 2)) offset -= MOVIES.length;
                   
-                  let zIndex = 10 - Math.abs(offset);
-                  let scale = offset === 0 ? 1 : Math.max(0.6, 1 - Math.abs(offset) * 0.15);
-                  let translateX = offset * 80;
-                  let rotateY = offset * -25;
-                  let opacity = Math.abs(offset) > 2 ? 0 : 1 - Math.abs(offset) * 0.3;
+                  const zIndex = 10 - Math.abs(offset);
+                  const scale = offset === 0 ? 1 : Math.max(0.6, 1 - Math.abs(offset) * 0.15);
+                  const translateX = offset * 80;
+                  const rotateY = offset * -25;
+                  const opacity = Math.abs(offset) > 2 ? 0 : 1 - Math.abs(offset) * 0.3;
                   
                   return (
                     <div 
@@ -1040,7 +1026,7 @@ export default function Home() {
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" strokeWidth="2" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
                 <span className="font-display text-[#C9A84C] text-2xl font-bold">CineVista</span>
               </div>
-              <p className="text-[#9E9E9E] text-sm leading-relaxed mb-8">{t('footer_tagline')}. Sri Lanka's premiere theatrical destination.</p>
+              <p className="text-[#9E9E9E] italic mb-6 leading-relaxed font-sans text-lg">&quot;I didn&apos;t just watch a movie; I experienced it. CineVista&apos;s premium service is unmatched in the country.&quot;</p>
               <div className="flex gap-4">
                 {["IG", "FB", "YT", "TT"].map((s, i) => (
                   <a key={i} href="#" className="w-10 h-10 rounded-full glass-light border border-white/10 flex items-center justify-center text-white hover:text-[#C9A84C] transition-all" aria-label={s}>
@@ -1096,7 +1082,7 @@ export default function Home() {
         {/* Bottom Bar */}
         <div className="bg-[#040405] py-10 border-t border-white/5">
           <div className="max-w-[1400px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-xs text-[#5A5A5A]">© 2025 CineVista (Pvt) Ltd. All Rights Reserved. | Designed with ♦ for Sri Lanka's cinema lovers.</p>
+            <p className="text-xs text-[#5A5A5A]">© 2025 CineVista (Pvt) Ltd. All Rights Reserved. | Designed with ♦ for Sri Lanka&apos;s cinema lovers.</p>
             <div className="flex gap-6 text-[10px] font-bold tracking-[0.3em] uppercase text-[#5A5A5A]">
               <button onClick={() => setLang('en')} className={`hover:text-white transition-colors ${lang === 'en' ? 'text-[#C9A84C]' : ''}`}>EN</button>
               <button onClick={() => setLang('si')} className={`hover:text-white transition-colors ${lang === 'si' ? 'text-[#C9A84C]' : ''}`}>සිං</button>

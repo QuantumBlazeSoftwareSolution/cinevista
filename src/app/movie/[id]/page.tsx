@@ -9,8 +9,62 @@ import { MOVIES } from "@/data/movies";
 export default function MovieDetail({ params }: { params: { id: string } }) {
   const movie = MOVIES.find(m => m.id === params.id) || MOVIES[0];
   const [activeTab, setActiveTab] = useState<'details' | 'booking'>('details');
+  const [bookingStep, setBookingStep] = useState<1 | 2 | 3>(1); // 1: Date/Time, 2: Seat Map, 3: Checkout
+  const [ticketCount, setTicketCount] = useState(2);
+  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
   const [selectedDate, setSelectedDate] = useState(0);
   const [selectedTime, setSelectedTime] = useState<number | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const mockSoldSeats = ['K5', 'K6', 'L10', 'L11', 'C12', 'C13', 'C14', 'N1', 'N2', 'E5', 'E6', 'E7'];
+
+  const seatLayout = [
+    {
+      name: "BOX", price: "LKR 600.00",
+      rows: [
+        { id: 'N', left: [1,2,3,4,5,6], right: [7,8,9,10,11,12] },
+        { id: 'O', left: [1,2,3,4,5,6], right: [7,8,9,10,11,12] },
+        { id: 'P', left: [1,2,3,4,5,6], right: [7,8,9,10,11,12] },
+      ]
+    },
+    {
+      name: "BALCONY", price: "LKR 550.00",
+      rows: [
+        { id: 'K', left: [1,2,3,4,5,6,7], right: [8,9,10,11,12,13,14] },
+        { id: 'L', left: [1,2,3,4,5,6,7,8], right: [9,10,11,12,13,14,15] },
+        { id: 'M', left: [1,2,3,4,5,6,7,8], right: [9,10,11,12,13,14,15] },
+      ]
+    },
+    {
+      name: "ODC", price: "LKR 500.00",
+      rows: [
+        { id: 'A', left: [1,2,3,4,5,6,7,8], right: [9,10,11,12,13,14,15,16] },
+        { id: 'B', left: [1,2,3,4,5,6,7], right: [8,9,10,11,12,13,14,15] },
+        { id: 'C', left: [1,2,3,4,5,6,7,8], right: [9,10,11,12,13,14,15,16] },
+        { id: 'D', left: [1,2,3,4,5,6,7,8], right: [9,10,11,12,13,14,15,16] },
+        { id: 'E', left: [1,2,3,4,5,6,7,8,9], right: [10,11,12,13,14,15,16,17] },
+        { id: 'F', left: [1,2,3,4,5,6,7,8,9], right: [10,11,12,13,14,15,16,17] },
+        { id: 'G', left: [1,2,3,4,5,6,7,8,9], right: [10,11,12,13,14,15,16,17] },
+        { id: 'H', left: [1,2,3,4,5,6,7,8,9], right: [10,11,12,13,14,15,16,17] },
+        { id: 'I', left: [1,2,3,4,5,6,7,8,9], right: [10,11,12,13,14,15,16,17] },
+        { id: 'J', left: [1,2,3,4,5,6,7,8,9], right: [10,11,12,13,14,15,16,17] },
+      ]
+    }
+  ];
+
+  const handleSeatClick = (seatId: string) => {
+    if (mockSoldSeats.includes(seatId)) return;
+    
+    if (selectedSeats.includes(seatId)) {
+      setSelectedSeats(selectedSeats.filter(id => id !== seatId));
+    } else {
+      if (selectedSeats.length < ticketCount) {
+        setSelectedSeats([...selectedSeats, seatId]);
+      } else {
+        setAlertMessage(`You can only select ${ticketCount} seats.`);
+      }
+    }
+  };
 
   const dates = [
     { day: "January 26", active: false },
@@ -38,9 +92,17 @@ export default function MovieDetail({ params }: { params: { id: string } }) {
         
         {/* Navbar */}
         <div className="absolute top-0 w-full p-6 flex justify-between items-center z-30">
-          <Link href="/" className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md">
+          <button onClick={() => {
+            if (activeTab === 'booking' && bookingStep > 1) {
+              setBookingStep((prev) => prev - 1 as any);
+            } else if (activeTab === 'booking') {
+              setActiveTab('details');
+            } else {
+              window.history.back();
+            }
+          }} className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md hover:bg-white/20 transition-all">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          </Link>
+          </button>
           <div className="flex gap-4">
             <button className="w-10 h-10 flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8M16 6l-4-4-4 4M12 2v13"/></svg>
@@ -201,7 +263,7 @@ export default function MovieDetail({ params }: { params: { id: string } }) {
               </button>
             </div>
           </div>
-        ) : (
+        ) : bookingStep === 1 ? (
           <div className="animate-fade-in-up pb-32">
             {/* Date Selector */}
             <div className="flex justify-between items-center mb-10 border-b border-white/10 pb-6">
@@ -246,22 +308,191 @@ export default function MovieDetail({ params }: { params: { id: string } }) {
               ))}
             </div>
 
-            {/* Choose Seats Button */}
+            {/* Next Button */}
             <div className="fixed bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-[#111114] via-[#111114] to-transparent z-50">
               <button 
                 onClick={() => {
-                  if (selectedTime === null) alert("Please select a showtime.");
-                  else alert("Proceeding to seat selection for " + movie.title);
+                  if (selectedTime === null) setAlertMessage("Please select a showtime.");
+                  else setBookingStep(2);
                 }}
                 className="w-full max-w-[800px] mx-auto flex justify-center items-center gap-3 py-5 rounded-2xl text-white font-bold tracking-[0.2em] text-sm bg-gradient-to-r from-[#FF512F] to-[#DD2476] shadow-[0_15px_35px_rgba(221,36,118,0.4)] hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
-                CHOOSE SEATS
+                SELECT SEATS
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="animate-pulse"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </button>
             </div>
           </div>
+        ) : bookingStep === 2 ? (
+          <div className="animate-fade-in-up pb-32">
+            
+            {/* Ticket Count Selector */}
+            <div className="mb-12 text-center">
+              <h3 className="text-xl font-bold font-display tracking-wide mb-6">HOW MANY TICKETS?</h3>
+              <div className="flex items-center justify-center gap-6">
+                <button 
+                  onClick={() => setTicketCount(Math.max(1, ticketCount - 1))}
+                  className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center hover:bg-white hover:text-black transition-colors"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14"/></svg>
+                </button>
+                <span className="text-5xl font-display font-bold w-16 text-center">{ticketCount}</span>
+                <button 
+                  onClick={() => setTicketCount(Math.min(10, ticketCount + 1))}
+                  className="w-12 h-12 rounded-full border border-[#C9A84C] text-[#C9A84C] flex items-center justify-center hover:bg-[#C9A84C] hover:text-black transition-colors"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Screen Curve */}
+            <div className="mb-16 mt-8">
+              <div className="h-2 w-3/4 mx-auto bg-gradient-to-r from-transparent via-[#FF512F] to-transparent rounded-[100%] shadow-[0_10px_30px_rgba(255,81,47,0.5)]"></div>
+              <p className="text-center text-[#9E9E9E] text-xs tracking-[0.3em] mt-4">SCREEN</p>
+            </div>
+
+            {/* Seat Map */}
+            <div className="overflow-x-auto pb-8 scrollbar-none">
+              <div className="min-w-[600px] flex flex-col items-center gap-10">
+                {seatLayout.map((section, sIdx) => (
+                  <div key={sIdx} className="w-full">
+                    <p className="text-[#5A5A5A] text-xs tracking-widest mb-4 text-center uppercase">{section.name} <span className="text-[#9E9E9E] ml-2 font-accent">({section.price})</span></p>
+                    <div className="flex flex-col gap-3 items-center">
+                      {section.rows.map((row) => (
+                        <div key={row.id} className="flex items-center gap-6">
+                          <span className="text-[#5A5A5A] font-bold w-4 text-center">{row.id}</span>
+                          
+                          <div className="flex gap-2">
+                            {row.left.map(num => {
+                              const seatId = `${row.id}${num}`;
+                              const isSold = mockSoldSeats.includes(seatId);
+                              const isSelected = selectedSeats.includes(seatId);
+                              return (
+                                <button
+                                  key={seatId}
+                                  disabled={isSold}
+                                  onClick={() => handleSeatClick(seatId)}
+                                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-t-lg rounded-b-sm text-[10px] font-bold flex items-center justify-center transition-all
+                                    ${isSold ? 'bg-white/10 text-white/20 cursor-not-allowed' : 
+                                      isSelected ? 'bg-[#C9A84C] text-black scale-110 shadow-[0_0_15px_rgba(201,168,76,0.6)]' : 
+                                      'border border-white/20 text-[#9E9E9E] hover:border-[#C9A84C] hover:text-white cursor-pointer'}`}
+                                >
+                                  {num}
+                                </button>
+                              );
+                            })}
+                          </div>
+                          
+                          <div className="w-8 sm:w-16"></div> {/* Aisle */}
+
+                          <div className="flex gap-2">
+                            {row.right.map(num => {
+                              const seatId = `${row.id}${num}`;
+                              const isSold = mockSoldSeats.includes(seatId);
+                              const isSelected = selectedSeats.includes(seatId);
+                              return (
+                                <button
+                                  key={seatId}
+                                  disabled={isSold}
+                                  onClick={() => handleSeatClick(seatId)}
+                                  className={`w-7 h-7 sm:w-8 sm:h-8 rounded-t-lg rounded-b-sm text-[10px] font-bold flex items-center justify-center transition-all
+                                    ${isSold ? 'bg-white/10 text-white/20 cursor-not-allowed' : 
+                                      isSelected ? 'bg-[#C9A84C] text-black scale-110 shadow-[0_0_15px_rgba(201,168,76,0.6)]' : 
+                                      'border border-white/20 text-[#9E9E9E] hover:border-[#C9A84C] hover:text-white cursor-pointer'}`}
+                                >
+                                  {num}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Legend */}
+            <div className="flex justify-center gap-8 mt-4 mb-24 border-t border-white/10 pt-6">
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-t border border-white/20"></div>
+                <span className="text-xs text-[#9E9E9E]">Available</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-t bg-[#C9A84C]"></div>
+                <span className="text-xs text-[#9E9E9E]">Selected</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-t bg-white/10"></div>
+                <span className="text-xs text-[#9E9E9E]">Sold</span>
+              </div>
+            </div>
+
+            {/* Pay Button */}
+            <div className="fixed bottom-0 left-0 right-0 p-8 bg-gradient-to-t from-[#111114] via-[#111114] to-transparent z-50">
+              <button 
+                onClick={() => {
+                  if (selectedSeats.length !== ticketCount) {
+                    setAlertMessage(`Please select ${ticketCount} seats.`);
+                  } else {
+                    setBookingStep(3);
+                  }
+                }}
+                className={`w-full max-w-[800px] mx-auto flex justify-center items-center gap-3 py-5 rounded-2xl font-bold tracking-[0.2em] text-sm transition-all shadow-[0_15px_35px_rgba(221,36,118,0.4)]
+                  ${selectedSeats.length === ticketCount ? 'bg-gradient-to-r from-[#FF512F] to-[#DD2476] text-white hover:scale-[1.02] active:scale-[0.98]' : 'bg-white/10 text-white/50 cursor-not-allowed shadow-none'}`}
+              >
+                PAY LKR {selectedSeats.length > 0 ? (selectedSeats.length * 500) + '.00' : '0.00'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="animate-fade-in-up py-20 text-center">
+            <div className="w-24 h-24 bg-[#00E676]/10 rounded-full flex items-center justify-center mx-auto mb-8 border border-[#00E676]/30">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00E676" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3"/></svg>
+            </div>
+            <h2 className="text-3xl font-display font-bold mb-4">Tickets Confirmed!</h2>
+            <p className="text-[#9E9E9E] mb-12 max-w-md mx-auto">Your digital tickets for {movie.title} have been sent to your email. See you at the movies!</p>
+            
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-6 text-left max-w-sm mx-auto mb-12">
+              <p className="text-xs text-[#9E9E9E] tracking-widest mb-1">BOOKING ID</p>
+              <p className="font-bold mb-4 font-accent text-lg">CINE-{Math.floor(Math.random() * 1000000)}</p>
+              <p className="text-xs text-[#9E9E9E] tracking-widest mb-1">SEATS</p>
+              <p className="font-bold text-[#C9A84C]">{selectedSeats.join(', ')}</p>
+            </div>
+
+            <button 
+              onClick={() => {
+                setBookingStep(1);
+                setActiveTab('details');
+                setSelectedSeats([]);
+              }}
+              className="text-xs border border-white/20 px-8 py-3 rounded-full tracking-widest hover:bg-white hover:text-black transition-all"
+            >
+              BACK TO HOME
+            </button>
+          </div>
         )}
       </div>
+
+      {/* Custom Premium Alert Modal */}
+      {alertMessage && (
+        <div className="fixed inset-0 z-[10005] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm" role="dialog" aria-modal="true">
+          <div className="bg-[#111114] border border-[#C9A84C]/30 rounded-2xl p-8 max-w-sm w-full shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-fade-in-up">
+            <div className="w-12 h-12 rounded-full bg-[#FF3B3B]/10 flex items-center justify-center mb-6 border border-[#FF3B3B]/30 mx-auto">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF3B3B" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            </div>
+            <h3 className="text-xl font-display font-bold text-center mb-2">Attention</h3>
+            <p className="text-[#9E9E9E] text-center mb-8 text-sm">{alertMessage}</p>
+            <button 
+              onClick={() => setAlertMessage(null)}
+              className="w-full py-3 rounded-xl bg-white/10 hover:bg-[#C9A84C] hover:text-black transition-colors font-bold tracking-widest text-xs"
+            >
+              OKAY
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
