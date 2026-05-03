@@ -41,8 +41,12 @@ export default function CustomCursor() {
 
   return (
     <div 
-      className={`cursor z-[100000] pointer-events-none ${isHovered ? 'hovered' : ''} hidden md:flex`} 
-      style={{ left: cursorPos.x, top: cursorPos.y }}
+      className={`cursor pointer-events-none ${isHovered ? 'hovered' : ''} hidden md:flex`} 
+      style={{ 
+        left: cursorPos.x, 
+        top: cursorPos.y,
+        zIndex: 1000
+      }}
       aria-hidden="true"
     />
   );

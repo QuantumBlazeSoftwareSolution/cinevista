@@ -18,7 +18,12 @@ export default function AlertModal({ isOpen, message, onClose, title = "Attentio
   if (!isOpen || !message || !mounted) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[10005] flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm" role="dialog" aria-modal="true">
+    <div 
+      className="fixed inset-0 flex items-center justify-center p-6 bg-black/60 backdrop-blur-sm text-white" 
+      style={{ zIndex: 500 }}
+      role="dialog" 
+      aria-modal="true"
+    >
       <div className="bg-[#111114] border border-[#C9A84C]/30 rounded-2xl p-8 max-w-sm w-full min-w-[320px] shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-fade-in-up">
         <div className="w-12 h-12 rounded-full bg-[#FF3B3B]/10 flex items-center justify-center mb-6 border border-[#FF3B3B]/30 mx-auto">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF3B3B" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
